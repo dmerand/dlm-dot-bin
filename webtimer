@@ -1,0 +1,4 @@
+#!/bin/sh
+# By Donald L. Merand
+# frontend to apptimer specifically for web purposes
+apptimer "$1" Safari "$2"

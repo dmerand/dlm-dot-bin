@@ -1,0 +1,41 @@
+#!/bin/bash
+#---------------------------------------------------------#
+# doku2html
+# Donald L. Merand
+# ----------------
+# This is a wrapper to run a PHP script that parses dokuwiki 
+# input. You can either pipe input, or pass a (list of) 
+# file(s)
+# ----------------
+# You'll need a copy of DokuWiki to run against, and 
+# the DokuWiki CLI tools, which can be found here: 
+# http://www.dokuwiki.org/tips:dokuwiki_parser_cli
+#---------------------------------------------------------#
+
+#path to the php file to run dokuwiki parsing from the CLI
+phpcli=~/.bin/lib/dokuwiki/bin/dokucli.php
+
+if [ ! -e "$phpcli" ]; then
+  echo "Cannot find dokuwiki command line interface. Exiting..."
+  exit 1
+fi
+
+#if parameters are not empty, assume files have been passed
+if [ $# -gt 0 ]
+then
+	for file in "$@"
+	do
+		#ignore any non-files that are passed as parameters
+		if [ -f "$file" ]
+		then
+			cat "$file"
+			echo #line break between files
+		fi
+	done |
+	#    ^ note the pipe
+	#now make one big HTML document out of whatever is passed
+	php $phpcli
+else
+	#read from stdin
+	php $phpcli
+fi

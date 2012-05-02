@@ -1,0 +1,14 @@
+#!/bin/sh
+# By Donald Merand
+# Usage: apptimer MINUTES APPLICATION APP_PARAMETERS
+
+MINUTES="$1"
+SECONDS=$((MINUTES * 60))
+shift
+APPLICATION="$1"
+shift
+PARAMETERS="$@"
+
+open "$PARAMETERS" -a "$APPLICATION"
+sleep "$SECONDS"
+killall "$APPLICATION"

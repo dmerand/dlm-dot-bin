@@ -1,0 +1,18 @@
+#!/bin/sh
+#word frequency with 5-column printout
+#author: donald l. merand
+
+#get contents of file(s)
+cat "$@" |
+#remove anything that's not alphanumeric
+tr -cs "[:alpha:]'" "\n" |
+#convert everything to lowercase
+tr "A-Z" "a-z" |
+#sort results
+sort |
+#count number of occurences of each word
+uniq -c |
+#now sort by the count, largest first
+sort -r |
+#order the output in 5-column, 20-char width
+awk '{printf("%-20s\t", $0);if (NR % 5 == 0) {print ""}}'

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#+----------------------------------+
+#|  randomword                      |
+#|  author: Donald L. Merand        |
+#|  display <integer> random words  |
+#+----------------------------------+
+#|  usage: randomword <integer>     |
+#+----------------------------------+
+
+num=${1:-1}
+
+if [[ $num != [0-9]* ]]; then
+  echo "send an integer please"
+  exit 1
+fi
+
+x=0
+
+while [[ $x < $num ]]; do
+  curl -s http://randomword.setgetgo.com/get.php
+  x=$(( $x + 1 ))
+done 

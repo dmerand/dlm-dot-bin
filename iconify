@@ -1,0 +1,17 @@
+#!/bin/sh
+#---------------------------------------------------------#
+# iconify
+# Donald L. Merand
+# ----------------
+# Convert any image file into a suitable icon
+# Typically I use it with http://thenounproject.com icons
+#---------------------------------------------------------#
+# Usage: iconify <file>
+#   will return <file_icon.png>
+#---------------------------------------------------------#
+
+INFILE=$(basename "$1")
+BASEFILE=${INFILE%.*}
+FILLCOLOR="#888888"
+
+convert "$INFILE" -transparent white -fill "$FILLCOLOR" -opaque black "$BASEFILE"_icon.png

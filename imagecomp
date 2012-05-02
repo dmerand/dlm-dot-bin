@@ -1,0 +1,124 @@
+#!/bin/sh
+
+# IMAGE COMPOSITOR
+# Author: Donald L. Merand
+# Description: Merge images in a directory together into one composite image.
+#   Be careful, this program is recursive and can eat up some disk space
+#   creating images in subdirectories.
+
+# default program options
+RESULTSDIR="_results"
+DIMENSIONS="640" 
+EXTENSION="png"
+# conversion options
+BLEND=50
+COMPOSITE=$(which composite)
+
+
+# help message
+function usage {
+  #pass a message if you want
+  [ ! -z "$1" ] && echo "$1\n"
+  cat << USAGE
+Usage: imagecomp <options> image_dir
+Options:
+  -d – Results directory (default _results)
+  -s – Result image size (default 640x640)
+  -e – Result image type (default png)
+USAGE
+}
+
+
+#get command line params
+while getopts ":hd:s:e:" OPTNAME
+do
+  case "$OPTNAME" in
+    "h")
+      usage
+      exit
+      ;;
+    "d")
+      RESULTSDIR=$OPTARG
+      ;;
+    "s")
+      DIMENSIONS=$OPTARG
+      ;;
+    "e")
+      EXTENSION=$OPTARG
+      ;;
+    "?")
+      echo "Unknown option $OPTARG"
+      ;;
+    ":")
+      echo "No argument value for option $OPTARG"
+      ;;
+    *)
+    # Should not occur
+      echo "Unknown error while processing options"
+      ;;
+  esac
+done
+
+#now get the non-options, in this case `image_dir`
+shift $(($OPTIND - 1))
+DIR="$1"
+
+
+# check passed parameters
+if [ -z "$DIR" ]; then
+  usage "Please choose a directory where images to composite are stored."
+  exit 1
+fi
+
+if [ ! -d "$DIR" ]; then
+  usage "Please make sure you're passing a directory with images, not just a file."
+  exit 1
+fi
+
+if [ ! "$COMPOSITE" ]; then
+  usage "Please install ImageMagick"
+  exit 1
+fi
+
+
+# define image compositing as a reusable function
+function composite {
+  # expects only a directory of $EXENSION files as an input
+  DIR="$1"
+
+  #exit if no input parameter
+  [ -z "$DIR" ] && exit 1
+  
+  #exit if current dir is empty or only has one file
+  dir_count=$(ls "$DIR" | wc -l)
+  if [ $dir_count -eq 0 -o $dir_count -eq 1 ]; then
+    exit 1
+  fi
+
+  NEWIMAGEDIR="$DIR/$RESULTSDIR"
+  #create the results directory if it doesn't exist already
+  [ ! -d "$NEWIMAGEDIR" ] && mkdir "$NEWIMAGEDIR"
+
+  #set our initial counter
+  x=1
+
+  #loop through the images and combine them
+  for image in "$DIR"/{*.png,*.jpg,*.gif,*.tiff}; do
+    if [ -e "$image" ]; then
+      echo "adding $image to $NEWIMAGEDIR..."
+      if [ $((x % 2)) -eq 1 ]; then
+        prev_image="$image"
+      else
+        #if the result is a file, composite it in
+        $COMPOSITE -strip -resize "$DIMENSIONS" -blend "$BLEND" "$image" "$prev_image" "$NEWIMAGEDIR/$x.$EXTENSION"
+      fi
+      x=$((x + 1))
+    fi
+  done
+
+  #now recurse...
+  composite "$NEWIMAGEDIR"
+}
+
+#now run the actual image compositing
+composite "$DIR"

@@ -1,0 +1,8 @@
+#/bin/sh
+#given a bunch of text, return the IP addresses
+#expects input to be piped or redirected
+#author: donald l. merand
+
+sed -n -e 's/.* \([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\) .*/\1/p' | 
+sort | 
+uniq

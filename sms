@@ -1,0 +1,55 @@
+#!/bin/sh
+#---------------------------------------------------------#
+# sms
+# Donald L. Merand
+# ----------------
+# Send SMS messages from the command line using textbelt.com api
+#---------------------------------------------------------#
+
+NUMBER=1234567890 #default number
+
+show_help() {
+cat << EOF
+SMS Sender
+Send a message via SMS (defaults to Donald's Cell)
+  
+OPTIONS
+	-m (required) - Message to send
+	-n (optional) - Number to send to in format 1234567890
+EOF
+}
+
+#parse parameters
+while getopts "n:m:" OPTNAME
+do
+	case "$OPTNAME" in
+		"n")
+      NUMBER=$OPTARG
+			;;
+		"m")
+			MESSAGE=$OPTARG
+			;;
+		"?")
+			echo "Unknown option $OPTARG"
+			;;
+		":")
+			echo "No argument value for option $OPTARG"
+			;;
+		*)
+		# Should not occur
+			echo "Unknown error while processing options"
+			;;
+	esac
+done
+
+if [ -z "$MESSAGE" ]; then
+  show_help
+  exit 1
+fi
+
+if [[ $NUMBER != [0-9]* ]]; then
+  show_help
+  exit 1
+fi
+
+curl http://textbelt.com/text -d number="$NUMBER" -d message="$MESSAGE"

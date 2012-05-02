@@ -1,0 +1,31 @@
+#!/bin/sh
+#convert a TSV file to an HTML file
+#author: Donald L. Merand
+
+#note: this is most useful in conjunction with bcat, which sends results to the browser
+# you can get bcat on OS X using homebrew
+# http://mxcl.github.com/homebrew/
+# then type "brew install bcat"
+
+#also note: this script only creates an HTML snippet - you'll probably want to wrap
+# it in some pretty CSS, not to mention <html> and <body> tags
+
+#convert Mac line endings, if any
+perl -p -e 's/\r/\n/g' |
+
+#now do the conversion
+awk '
+BEGIN {
+	FS="\t"
+	printf "<table>\n"
+}
+{
+	printf "\n\n<tr>"
+	for (i=1;i<=NF;i++) {
+		printf "<td>%s</td>", $i
+	}
+	printf "</tr>"
+}
+END {
+	printf "\n</table>"
+}'

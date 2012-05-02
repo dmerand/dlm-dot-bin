@@ -1,0 +1,31 @@
+#/bin/bash
+
+INFILE=$1
+
+if [ -z "$INFILE" ]
+then
+    echo "usage: $0 source.file"
+    exit
+fi
+
+cat <<HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style type="text/css">
+HEAD
+
+~/Scripts/lib/highlight/vim_syntax.sh
+
+cat <<RESTOFHEAD
+  </style>
+</head>
+<body>
+RESTOFHEAD
+
+~/Scripts/lib/highlight/vim_highlight.sh "$INFILE"
+
+cat <<FOOTER
+</body>
+</html>
+FOOTER

@@ -1,0 +1,14 @@
+#/bin/sh
+# mac_extract
+# donald l. merand
+# 07.04.2011
+#
+# given a bunch of text, return anything resembling a MAC address
+# expects input to be piped or redirected. however, will work from
+# STDIN as well.
+
+tr "a-z" "A-Z" | #convert lowercase to uppercase
+#this line filters out the MAC addresses
+sed -n -e 's/.* \([0-9A-F]\{2\}:[0-9A-F]\{2\}:[0-9A-F]\{2\}:[0-9A-F]\{2\}:[0-9A-F]\{2\}:[0-9A-F]\{2\}\) /\1/p' | 
+sort | #alphabetically
+uniq #return unique results

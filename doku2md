@@ -1,0 +1,57 @@
+#!/bin/sh
+#--------------------------------------------------------------------------#
+# doku2md
+# Dokuwiki to Markdown Converter
+# Donald L. Merand
+# 07.03.2011
+# ----------------------------
+# Converts dokuwiki to HTML, and passes to pandoc for... whatever
+# parameters are passed straight to pandoc, so pandoc syntax applies
+# ----------------------------
+# requires "doku2html" and "pandoc" to work, clearly.
+#--------------------------------------------------------------------------#
+
+# all we know is that coming from dokuwiki we get html. the rest is left 
+#  to the user
+pd_options="-f html -t markdown --strict"
+
+#test for existence of required programs
+test_existence() {
+	program=$1
+	which ${program} &> /dev/null;
+
+	if [[ "$?" != "0" ]];
+	then
+		echo "'$program' appears to not be installed, check your PATH variable"
+		exit 1
+	fi
+}
+
+test_existence doku2html
+test_existence pandoc
+
+#if parameters are not empty, assume files have been passed. else assume STDIN
+if [ $# -gt 0 ]
+then
+	#we passed parameters and/or a file list
+	for param in "$@"
+	do
+		if [ -f "$param" ] #file was passed
+		then
+			#read the file
+			contents="$contents\n$(cat "$param")"
+		else #parameter was passed. append it to param list.
+			pd_options="$pd_options $param"
+		fi
+	done
+
+	#get dokuwiki file contents
+	echo "$contents" | 
+	# convert to html
+	doku2html |
+	# now pass to pandoc
+	pandoc $pd_options
+else
+	#read dokuwiki syntax from stdin, pass to pandoc, create markdown
+	doku2html | pandoc $pd_options
+fi
