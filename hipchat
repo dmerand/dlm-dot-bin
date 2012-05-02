@@ -11,7 +11,7 @@
 
 HOST='api.hipchat.com'
 #get your own auth token from https://www.hipchat.com/admin/api
-AUTH_TOKEN="YOUR AUTH TOKEN HERE" #hard-coded Proof API key for now
+AUTH_TOKEN="AUTH TOKEN HERE" #hard-coded Proof API key for now
 ROOM_ID="DEFAULT ROOM ID"
 FROM="CommandLine"
 NOTIFY=0 #boolean
@@ -26,6 +26,7 @@ Usage - \`hipchat <options> "message"\`
 Options:
   -h - Show this help screen
   -l - List HipChat rooms
+  -u - List HipChat users
   -f - Specify sender (up to 15 characters)
   -r - Specify HipChat room ID
   -a - Specify HipChat API token
@@ -50,11 +51,15 @@ test_existence curl
 
 #list available hipchat rooms
 list_rooms() {
-  curl -sS \
-  "https://api.hipchat.com/v1/rooms/list?auth_token=$AUTH_TOKEN"
+  curl -sS "https://api.hipchat.com/v1/rooms/list?auth_token=$AUTH_TOKEN"
 }
 
-while getopts ":hlf:r:a:n:c:" OPTNAME
+#list available hipchat users
+list_users() {
+  curl -sS "https://api.hipchat.com/v1/users/list?auth_token=$AUTH_TOKEN"
+}
+
+while getopts ":hluf:r:a:n:c:" OPTNAME
 do
   case "$OPTNAME" in
     "h")
@@ -63,6 +68,10 @@ do
       ;;
     "l")
       list_rooms
+      exit
+      ;;
+    "u")
+      list_users
       exit
       ;;
     "f")
