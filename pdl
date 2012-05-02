@@ -15,36 +15,36 @@
 #if we were passed parameters
 if [ "$#" -gt 0 ]
 then
-	# for every file passed
-	for file in "$@"
-	do
-		# (if it's an actual file)
-		if [ -f "$file" ]
-		then
-			#run pdflatex on the input, redirect STDOUT to null
-			xelatex "$file" 1> /dev/null 2> /dev/null
+  # for every file passed
+  for file in "$@"
+  do
+    # (if it's an actual file)
+    if [ -f "$file" ]
+    then
+      #run pdflatex on the input, redirect STDOUT to null
+      xelatex "$file" 1> /dev/null 2> /dev/null
 
-			#get the name of the file minus the extension
-			base_file=${file%.*} #delete the final extension
+      #get the name of the file minus the extension
+      base_file=${file%.*} #delete the final extension
 
-			#now trash the pdflatex files
-			rm "$base_file".aux "$base_file".log "$base_file".out
+      #now trash the pdflatex files
+      rm "$base_file".aux "$base_file".log "$base_file".out
 
-			#then open the PDF file
-			open "$base_file".pdf
-		fi
-	done
+      #then open the PDF file
+      open "$base_file".pdf
+    fi
+  done
 else
-	#assume STDIN
-	xelatex 1> /dev/null 2> /dev/null 
-	#creates a file called texput.pdf
-	#if the syntax was correct and a file was generated...
-	if [ -f texput.pdf ]
-	then
-		#we're re-directing STDERR here because we don't care
-		# if any of these files are missing
-		rm texput.aux texput.log texput.out 2> /dev/null
-		#now open the resulting PDF
-		open texput.pdf
-	fi
+  #assume STDIN
+  xelatex 1> /dev/null 2> /dev/null 
+  #creates a file called texput.pdf
+  #if the syntax was correct and a file was generated...
+  if [ -f texput.pdf ]
+  then
+    #we're re-directing STDERR here because we don't care
+    # if any of these files are missing
+    rm texput.aux texput.log texput.out 2> /dev/null
+    #now open the resulting PDF
+    open texput.pdf
+  fi
 fi

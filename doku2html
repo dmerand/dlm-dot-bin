@@ -23,19 +23,19 @@ fi
 #if parameters are not empty, assume files have been passed
 if [ $# -gt 0 ]
 then
-	for file in "$@"
-	do
-		#ignore any non-files that are passed as parameters
-		if [ -f "$file" ]
-		then
-			cat "$file"
-			echo #line break between files
-		fi
-	done |
-	#    ^ note the pipe
-	#now make one big HTML document out of whatever is passed
-	php $phpcli
+  for file in "$@"
+  do
+    #ignore any non-files that are passed as parameters
+    if [ -f "$file" ]
+    then
+      cat "$file"
+      echo #line break between files
+    fi
+  done |
+  #    ^ note the pipe
+  #now make one big HTML document out of whatever is passed
+  php $phpcli
 else
-	#read from stdin
-	php $phpcli
+  #read from stdin
+  php $phpcli
 fi

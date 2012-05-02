@@ -20,24 +20,24 @@ NOTIFY=0 #boolean
 COLOR="red" #can be red, yellow, green, purple, or random
 
 show_help() {
-	echo -e "HIPCHAT MESSAGE SENDER\n"
-	echo -e "-h\n\tShow this help screen"
-	echo -e "\n-m (required)\n\tMessage to post to chatroom"
-	echo -e "-f\n\tSpecify sender (up to 15 characters)"
-	echo -e "-r\n\tSpecify HipChat room ID"
-	echo -e "-a\n\tSpecify HipChat API token"
+  echo -e "HIPCHAT MESSAGE SENDER\n"
+  echo -e "-h\n\tShow this help screen"
+  echo -e "\n-m (required)\n\tMessage to post to chatroom"
+  echo -e "-f\n\tSpecify sender (up to 15 characters)"
+  echo -e "-r\n\tSpecify HipChat room ID"
+  echo -e "-a\n\tSpecify HipChat API token"
 }
 
 #test for existence of required programs
 test_existence() {
-	program=$1
-	which ${program} &> /dev/null;
+  program=$1
+  which ${program} &> /dev/null;
 
-	if [[ "$?" != "0" ]];
-	then
-		echo "'$program' appears to not be installed, check your PATH variable"
-		exit 1
-	fi
+  if [[ "$?" != "0" ]];
+  then
+    echo "'$program' appears to not be installed, check your PATH variable"
+    exit 1
+  fi
 }
 
 test_existence perl
@@ -45,47 +45,47 @@ test_existence curl
 
 while getopts ":hr:f:m:a:" OPTNAME
 do
-	case "$OPTNAME" in
-		"h")
-			show_help
-			exit
-			;;
-		"r")
-			ROOM_ID=$OPTARG
-			;;
-		"f")
-			FROM=$OPTARG
-			;;
-		"m")
-			MESSAGE=$OPTARG
-			;;
-		"a")
-			AUTH_TOKEN=$OPTARG
-			;;
-		"?")
-			echo "Unknown option $OPTARG"
-			;;
-		":")
-			echo "No argument value for option $OPTARG"
-			;;
-		*)
-		# Should not occur
-			echo "Unknown error while processing options"
-			;;
-	esac
+  case "$OPTNAME" in
+    "h")
+      show_help
+      exit
+      ;;
+    "r")
+      ROOM_ID=$OPTARG
+      ;;
+    "f")
+      FROM=$OPTARG
+      ;;
+    "m")
+      MESSAGE=$OPTARG
+      ;;
+    "a")
+      AUTH_TOKEN=$OPTARG
+      ;;
+    "?")
+      echo "Unknown option $OPTARG"
+      ;;
+    ":")
+      echo "No argument value for option $OPTARG"
+      ;;
+    *)
+    # Should not occur
+      echo "Unknown error while processing options"
+      ;;
+  esac
 done
 
 #test params to make sure they're not empty
 if [ -z "$1" ]
 then
-	show_help
-	exit 1
+  show_help
+  exit 1
 fi
 
 if [ -z "$MESSAGE" ]
 then
-	echo "Please specify a message to post using the -m option"
-	exit
+  echo "Please specify a message to post using the -m option"
+  exit
 fi
 
 #clean up the message 
@@ -99,5 +99,5 @@ MESSAGE=$(echo -n "${MESSAGE}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", 
 
 #now actually send the message
 curl -sS \
-	-d "auth_token=$AUTH_TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$MESSAGE&notify=$NOTIFY" \
-	https://$HOST/v1/rooms/message
+  -d "auth_token=$AUTH_TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$MESSAGE&notify=$NOTIFY" \
+  https://$HOST/v1/rooms/message

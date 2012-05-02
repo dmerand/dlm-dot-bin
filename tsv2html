@@ -16,16 +16,16 @@ perl -p -e 's/\r/\n/g' |
 #now do the conversion
 awk '
 BEGIN {
-	FS="\t"
-	printf "<table>\n"
+  FS="\t"
+  printf "<table>\n"
 }
 {
-	printf "\n\n<tr>"
-	for (i=1;i<=NF;i++) {
-		printf "<td>%s</td>", $i
-	}
-	printf "</tr>"
+  printf "\n\n<tr>"
+  for (i=1;i<=NF;i++) {
+    printf "<td>%s</td>", $i
+  }
+  printf "</tr>"
 }
 END {
-	printf "\n</table>"
+  printf "\n</table>"
 }'

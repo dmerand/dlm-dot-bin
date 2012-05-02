@@ -8,18 +8,18 @@
 #first make sure that man2html is installed
 if [ ! $(which man2html) ]
 then
-	echo "you need to install man2html for this script to work"
-	exit 1
+  echo "you need to install man2html for this script to work"
+  exit 1
 fi
 #same for bcat
 if [ ! $(which bcat) ]
 then
-	echo "you need to install bcat for this script to work"
-	exit 1
+  echo "you need to install bcat for this script to work"
+  exit 1
 fi
 
 #now assume that every parameter is a different manpage
 for f in "$@"
 do
-	man "$f" | man2html | bcat
+  man "$f" | man2html | bcat
 done
