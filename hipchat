@@ -3,29 +3,35 @@
 #+---------------------------------------+
 #| hipchat                               |
 #| author: Donald Merand                 |
-#| 2012.03.08                            |
 #+---------------------------------------+
 #| post a message to a HipChat room      |
-#| (defaults to Proof Main)              |
-#| very similar to this:                 |
+#| not dissimilar to                     |
 #| https://github.com/hipchat/hipchat-cli|
-#| but with better error checking        |
 #+---------------------------------------+
 
 HOST='api.hipchat.com'
-AUTH_TOKEN="YOUR TOKEN HERE"
-ROOM_ID="DEFAULT ROOM"
+#get your own auth token from https://www.hipchat.com/admin/api
+AUTH_TOKEN="YOUR AUTH TOKEN HERE" #hard-coded Proof API key for now
+ROOM_ID="DEFAULT ROOM ID"
 FROM="CommandLine"
 NOTIFY=0 #boolean
 COLOR="red" #can be red, yellow, green, purple, or random
 
 show_help() {
-  echo -e "HIPCHAT MESSAGE SENDER\n"
-  echo -e "-h\n\tShow this help screen"
-  echo -e "\n-m (required)\n\tMessage to post to chatroom"
-  echo -e "-f\n\tSpecify sender (up to 15 characters)"
-  echo -e "-r\n\tSpecify HipChat room ID"
-  echo -e "-a\n\tSpecify HipChat API token"
+  cat <<HELP
+HIPCHAT MESSAGE SENDER
+
+Usage - \`hipchat <options> "message"\`
+
+Options:
+  -h - Show this help screen
+  -l - List HipChat rooms
+  -f - Specify sender (up to 15 characters)
+  -r - Specify HipChat room ID
+  -a - Specify HipChat API token
+  -n - Trigger notifications in this message (values should be 0 or 1)
+  -c - Specify color (yellow, red, green, purple, random)
+HELP
 }
 
 #test for existence of required programs
@@ -40,27 +46,39 @@ test_existence() {
   fi
 }
 
-test_existence perl
 test_existence curl
 
-while getopts ":hr:f:m:a:" OPTNAME
+#list available hipchat rooms
+list_rooms() {
+  curl -sS \
+  "https://api.hipchat.com/v1/rooms/list?auth_token=$AUTH_TOKEN"
+}
+
+while getopts ":hlf:r:a:n:c:" OPTNAME
 do
   case "$OPTNAME" in
     "h")
       show_help
       exit
       ;;
-    "r")
-      ROOM_ID=$OPTARG
+    "l")
+      list_rooms
+      exit
       ;;
     "f")
       FROM=$OPTARG
       ;;
-    "m")
-      MESSAGE=$OPTARG
+    "r")
+      ROOM_ID=$OPTARG
       ;;
     "a")
       AUTH_TOKEN=$OPTARG
+      ;;
+    "n")
+      NOTIFY=$OPTARG
+      ;;
+    "c")
+      COLOR=$OPTARG
       ;;
     "?")
       echo "Unknown option $OPTARG"
@@ -75,6 +93,10 @@ do
   esac
 done
 
+#now get the non-options, in this case `MESSAGE`
+shift $(($OPTIND - 1))
+MESSAGE="$@"
+
 #test params to make sure they're not empty
 if [ -z "$1" ]
 then
@@ -82,22 +104,12 @@ then
   exit 1
 fi
 
-if [ -z "$MESSAGE" ]
-then
-  echo "Please specify a message to post using the -m option"
-  exit
-fi
-
-#clean up the message 
-# replace newlines with XHTML <br>
-MESSAGE=$(echo -n "${MESSAGE}" | sed "s/$/\<br\>/")
-# replace bare URLs with real hyperlinks
-MESSAGE=$(echo -n "${MESSAGE}" | perl -p -e "s/(?<!href=\")((?:https?|ftp|mailto)\:\/\/[^ \n]*)/\<a href=\"\1\"\>\1\<\/a>/g")
-# urlencode with perl
-MESSAGE=$(echo -n "${MESSAGE}" | perl -p -e 's/([^A-Za-z0-9])/sprintf("%%%02X", ord($1))/seg')
-
-
 #now actually send the message
 curl -sS \
-  -d "auth_token=$AUTH_TOKEN&room_id=$ROOM_ID&from=$FROM&color=$COLOR&message=$MESSAGE&notify=$NOTIFY" \
+  --data-urlencode "auth_token=$AUTH_TOKEN" \
+  --data-urlencode "room_id=$ROOM_ID" \
+  --data-urlencode "from=$FROM" \
+  --data-urlencode "color=$COLOR" \
+  --data-urlencode "notify=$NOTIFY" \
+  --data-urlencode "message=$MESSAGE" \
   https://$HOST/v1/rooms/message
