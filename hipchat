@@ -11,8 +11,8 @@
 
 HOST='api.hipchat.com'
 #get your own auth token from https://www.hipchat.com/admin/api
-AUTH_TOKEN="AUTH TOKEN HERE" #hard-coded Proof API key for now
-ROOM_ID="DEFAULT ROOM ID"
+AUTH_TOKEN="YOUR AUTH KEY"
+ROOM_ID="DEFAULT ROOM"
 FROM="CommandLine"
 NOTIFY=0 #boolean
 COLOR="red" #can be red, yellow, green, purple, or random
@@ -107,10 +107,9 @@ shift $(($OPTIND - 1))
 MESSAGE="$@"
 
 #test params to make sure they're not empty
-if [ -z "$1" ]
+if [ -z "$MESSAGE" ]
 then
-  show_help
-  exit 1
+  MESSAGE=$(cat)
 fi
 
 #now actually send the message
