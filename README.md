@@ -5,6 +5,8 @@ This is a collection of scripts that help me do things in my daily life. I'm put
 
 Note that these files have only been tested on my machine: Macbook Pro running OSX 10.7 as of 2012.05.01 20:47:45. Use at your own risk - I'd recommend knowing a bit about BASH scripting. [This](http://tldp.org/LDP/abs/html/) is a fantastic guide.
 
+Also note: many/most of these scripts assume that they're located in `$HOME/.bin/`, and that `$HOME/.bin` is in your path.
+
 
 License
 -------
