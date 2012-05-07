@@ -1,0 +1,100 @@
+#!/bin/bash
+
+#+---------------------------------------+
+#| dpaste                                |
+#| author: Donald Merand                 |
+#+---------------------------------------+
+#| post a message to dpaste              |
+#+---------------------------------------+
+
+HOST='http://dpaste.com/api/v1/'
+TITLE="post from CLI"
+POSTER="TheCommandLine"
+LANGUAGE="Bash" 
+HOLD=0
+
+show_help() {
+  cat <<HELP
+DPASTE SENDER
+
+Usage - \`dpaste <options> "code"\`
+
+Options:
+  -h - Show this help screen
+  -o - "hold" the paste for 30 days
+  -t <title> - Specify title
+  -p <poster> - Specify poster
+  -l <lang> - Specify language
+    language can be Python, SQL, CSS, XML, Diff, Ruby, Apache, Bash, etc.
+HELP
+}
+
+#test for existence of required programs
+test_existence() {
+  program=$1
+  which ${program} &> /dev/null;
+
+  if [[ "$?" != "0" ]];
+  then
+    echo "'$program' appears to not be installed, check your PATH variable"
+    exit 1
+  fi
+}
+
+test_existence curl
+
+while getopts ":hot:p:l:" OPTNAME
+do
+  case "$OPTNAME" in
+    "h")
+      show_help
+      exit
+      ;;
+    "o")
+      HOLD=1
+      ;;
+    "t")
+      TITLE=$OPTARG
+      ;;
+    "p")
+      POSTER=$OPTARG
+      ;;
+    "l")
+      LANGUAGE=$OPTARG
+      ;;
+    "?")
+      echo "Unknown option $OPTARG"
+      ;;
+    ":")
+      echo "No argument value for option $OPTARG"
+      ;;
+    *)
+    # Should not occur
+      echo "Unknown error while processing options"
+      ;;
+  esac
+done
+
+#now get the non-options, in this case `CONTENT`
+shift $(($OPTIND - 1))
+CONTENT="$@"
+
+#test params to make sure they're not empty
+if [ -z "$CONTENT" ]
+then
+  CONTENT=$(cat)
+fi
+
+#now actually send the message
+#     vv silent, show headers in output
+curl -si \
+  -d "title=$TITLE" \
+  -d "language=$LANGUAGE" \
+  -d "poster=$POSTER" \
+  -d "hold=$HOLD" \
+  -d "content=$CONTENT" \
+  "$HOST"
+
+if [ $? ]; then
+  echo "now paste the 'location' from the resulting header into your browser!"
+fi
