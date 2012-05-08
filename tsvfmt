@@ -59,7 +59,6 @@ BEGIN {
 {
   printf("%s", field_sep)
   for (i=1; i<max_nf; i++) {
-    #printf("%-*s%s", widths[i], $i, field_sep)
     printf("%-*s%s", widths[i], $i, field_sep)
   }
   printf("\n")
