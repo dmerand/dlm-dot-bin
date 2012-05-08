@@ -10,7 +10,7 @@
 #----------
 
 #set this to whatever you want to show up between columns
-field_separator=" | "
+field_separator="|"
 tmp_filename=tsv_${RANDOM}_tmp.txt
 tmp_widths=tsv_${RANDOM}_widths.txt
 
@@ -57,6 +57,7 @@ BEGIN {
   for (i in widths) { max_nf++ }
 }
 {
+  printf("%s", field_sep)
   for (i=1; i<max_nf; i++) {
     #printf("%-*s%s", widths[i], $i, field_sep)
     printf("%-*s%s", widths[i], $i, field_sep)
