@@ -8,7 +8,7 @@
 #+---------------------------------------+
 
 HOST='http://dpaste.com/api/v1/'
-TITLE="post from CLI"
+TITLE="Post from CLI"
 POSTER="TheCommandLine"
 LANGUAGE="Bash" 
 HOLD=0
@@ -17,7 +17,8 @@ show_help() {
   cat <<HELP
 DPASTE SENDER
 
-Usage - \`dpaste <options> "code"\`
+Usage - \`dpaste <options>\`
+  (or use a pipe eg: \`cat <file> | dpaste <options>\`
 
 Options:
   -h - Show this help screen
@@ -75,26 +76,16 @@ do
   esac
 done
 
-#now get the non-options, in this case `CONTENT`
-shift $(($OPTIND - 1))
-CONTENT="$@"
-
-#test params to make sure they're not empty
-if [ -z "$CONTENT" ]
-then
-  CONTENT=$(cat)
-fi
-
 #now actually send the message
 #     vv silent, show headers in output
 curl -si \
-  -d "title=$TITLE" \
-  -d "language=$LANGUAGE" \
-  -d "poster=$POSTER" \
-  -d "hold=$HOLD" \
-  -d "content=$CONTENT" \
-  "$HOST"
-
-if [ $? ]; then
-  echo "now paste the 'location' from the resulting header into your browser!"
-fi
+  -F 'content=<-' \
+  -F "title=$TITLE" \
+  -F "language=$LANGUAGE" \
+  -F "poster=$POSTER" \
+  -F "hold=$HOLD" \
+  "$HOST" |
+  
+#filter out the location from the result
+#got this code thanks to http://news.e-scribe.com/427
+grep ^Location: | colrm 1 10 
