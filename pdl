@@ -5,12 +5,18 @@
 # ----------
 # run xelatex on a list of files, delete the logs and auxes,
 # and open the resulting PDF file. Usable in a pipe.
+#
+# set the PDF environment variable to change the resulting
+# PDF filename
 # ----------
 # I often use this file in conjunction with pandoc, eg:
 # `pandoc <file.md> -f markdown -t latex | pdl` ,
 # which will convert a Markdown file to LaTeX, and then generate
 # a nice PDF.
 # ----------
+
+# set PDF env variable if it's not already set.
+[ -z "$PDF" ] && PDF="pdl_result.pdf"
 
 #if we were passed parameters
 if [ "$#" -gt 0 ]
@@ -45,6 +51,7 @@ else
     # if any of these files are missing
     rm texput.aux texput.log texput.out 2> /dev/null
     #now open the resulting PDF
-    open texput.pdf
+    mv texput.pdf "$PDF"
+    open "$PDF"
   fi
 fi
