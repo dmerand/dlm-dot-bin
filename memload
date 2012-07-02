@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# memload
+# author: [Donald L. Merand](http://donaldmerand.com)
+# gives summary of memory usage for all copies of the named process
+
+# needs a param
+if [ -z "$1" ]; then 
+	echo "usage: memload PROCESS"
+	exit 1
+fi
+
+
+ps -A -O %mem | 
+grep "$1" |
+awk -v proc="$1" '
+{
+	total += 2
+}
+
+END {
+	print "Memory usage: " proc
+	print "Total number of processes: " NR
+	print "Average % memory used: " NR/total
+}
+'
