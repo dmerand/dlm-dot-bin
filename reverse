@@ -1,0 +1,22 @@
+#!/bin/sh
+#---------------------------------------------------------#
+# reverse
+# Donald L. Merand
+# ----------------
+# Accepts piped input and reverses the output of it
+#---------------------------------------------------------#
+
+awk '
+#store the lines
+{
+  lines[NR] = $0
+}
+
+#now print them in reverse
+END {
+  numLines = NR
+  for ( i=numLines ; i>0 ; i-- ) {
+    print lines[i]
+  }
+}
+'
