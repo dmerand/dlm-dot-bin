@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+ID=YERID #you need to get this from http://setgetgo.com
+GETURL="http://setgetgo.com/get.php"
+
+if [ -z "$1" ]; then
+  echo "usage: get [KEY]"
+  exit 1
+fi
+
+KEY="${1}"
+
+$(which curl) -s "${GETURL}?Id=${ID}&Name=${KEY}"

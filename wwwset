@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+
+ID=YERID #you need to get this from http://setgetgo.com
+SETURL="http://setgetgo.com/set.php"
+
+if [ -z "${1}" -a -z "${2}" ]; then
+  echo "usage: set [KEY] [VALUE]"
+  exit 1
+fi
+
+KEY="${1}"
+VALUE="${2}"
+
+$(which curl) -s -d Id=${ID} --data-urlencode Name="${KEY}" --data-urlencode Value="${VALUE}" "${SETURL}"
