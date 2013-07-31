@@ -1,23 +1,16 @@
-#!/bin/sh
+#!/usr/bin/env ruby
 
-#+----------------------------------+
-#|  randomword                      |
-#|  author: Donald L. Merand        |
-#|  display <integer> random words  |
-#+----------------------------------+
-#|  usage: randomword <integer>     |
-#+----------------------------------+
+num_repeats = ARGV.shift
+exit 1 if num_repeats.nil?
+exit 1 unless num_repeats[/\d/]
+num_repeats = num_repeats.to_i
+exit 1 if num_repeats < 1
 
-num=${1:-1}
 
-if [[ $num != [0-9]* ]]; then
-  echo "send an integer please"
-  exit 1
-fi
+result = []
 
-x=0
+num_repeats.times do
+  result << `curl -s http://randomword.setgetgo.com/get.php`.gsub("\r\n", "").downcase
+end
 
-while [[ $x < $num ]]; do
-  curl -s http://randomword.setgetgo.com/get.php
-  x=$(( $x + 1 ))
-done 
+puts result.join " "
