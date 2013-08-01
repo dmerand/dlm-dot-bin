@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+
+require 'uri'
+
+if ARGV.empty?
+  puts "usage: timer 1 minute (or some other time)"
+  exit 1
+end
+
+base_search_url="https://encrypted.google.com/search?hl=en&q="
+arg = ARGV.join " "
+arg = URI.escape "timer #{arg}"
+
+exec "open '#{base_search_url}#{arg}'"
