@@ -11,4 +11,5 @@ base_search_url="https://encrypted.google.com/search?hl=en&q="
 arg = ARGV.join " "
 arg = URI.escape "timer #{arg}"
 
-exec "open '#{base_search_url}#{arg}'"
+#          vv don't foreground the timer
+exec "open -g '#{base_search_url}#{arg}'"
