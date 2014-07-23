@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+if ARGV[0].nil?
+  length = 8
+else
+  length = ARGV[0].to_i
+end
+
+puts rand(36**length).to_s(36)
