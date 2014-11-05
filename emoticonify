@@ -1,0 +1,22 @@
+#!/bin/sh
+#---------------------------------------------------------#
+# emoticonify
+# Donald L. Merand
+# ----------------
+# Convert any image file into a suitable hipchat emoticon
+#---------------------------------------------------------#
+# Usage: emoticonify <file>
+#   will return <file_emoticon.png>
+#---------------------------------------------------------#
+
+INFILE=$(basename "$1")
+BASEFILE=${INFILE%.*}
+TRANSPARENTCOLOR="white"
+FILLCOLOR="#888888"
+
+if [ ! $(which convert) ]; then
+  echo "you need to install imagemagick for this to work"
+  exit 1
+fi
+
+convert "$INFILE" -resize 120 -fuzz 5000 -transparent "$TRANSPARENTCOLOR" -strip "$BASEFILE"_emoticon.png
