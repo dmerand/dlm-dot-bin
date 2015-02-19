@@ -1,4 +1,13 @@
 #!/usr/bin/env ruby
+#---------------------------------------------------------#
+# timer
+# Donald L. Merand
+# ----------------
+# Google has a great timer. Why not be able to call it from
+# the command line? You can with this, and it auto-
+# backgrounds your web browser so you can keep working.
+#---------------------------------------------------------#
+
 
 require 'uri'
 
