@@ -13,7 +13,7 @@
 
 # all we know is that coming from dokuwiki we get html. the rest is left 
 #  to the user
-pd_options="-f html -t markdown --strict"
+pd_options="-f html -t markdown_strict"
 
 #test for existence of required programs
 test_existence() {
