@@ -1,9 +1,14 @@
 #!/usr/bin/env ruby
 
+# pull the first command-line parameter
 num_repeats = ARGV.shift
+# won't work with no param
 exit 1 if num_repeats.nil?
+# regular expression alert: won't work if param isn't a number
 exit 1 unless num_repeats[/\d/]
+# actually convert the param to a number
 num_repeats = num_repeats.to_i
+# won't work if the number is non-positive
 exit 1 if num_repeats < 1
 
 
