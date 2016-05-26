@@ -114,7 +114,7 @@ MESSAGE="$@"
 #test params to make sure they're not empty
 if [ -z "$MESSAGE" ]
 then
-  MESSAGE="/quote $(cat)"
+  MESSAGE="$(cat)"
 fi
 
 #now actually send the message
