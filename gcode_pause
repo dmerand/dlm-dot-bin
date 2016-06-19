@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+#---------------------------------------------------------#
+# gcode_pause
+# Donald L. Merand
+# ----------------
+# Given (1) a file, (2) a layer number, and an optional
+# (3) regular expression matching layer change, add a
+# pause command (defaults to "M226" but changeable) to
+# the GCODE.
+#---------------------------------------------------------#
+
+# if your printer firmware does something different to pause, eg M0,
+#         vvvvvv change this 
+PAUSE_CMD="M226"
+
+# "parse" input params
+FILENAME="$1"
+shift
+LAYER="$1"
+shift
+if [ "$1" ]; then
+  REGEX="$1"
+else
+  REGEX="; layer ${LAYER},"
+fi
+
+# test for legit params
+if [ -z "${FILENAME}" -o -z "${LAYER}" ]; then
+  echo "USAGE: gcode_pause <<FILENAME>> <<LAYER_NUMBER_TO_PAUSE>> {LAYER_REGEX}"
+  exit 1
+fi
+
+# otherwise insert layer pause code
+cat "${FILENAME}" |
+awk "/${REGEX}/{print \"; USER-ADDED PAUSE\n${PAUSE_CMD}\"}{print \$0}"
