@@ -21,6 +21,8 @@ shift
 if [ "$1" ]; then
   REGEX="$1"
 else
+  # if you don't use Simplify3D, you might want to change...
+  #      vvvvvvvvvvvvvvvvv default layer change code in Simplify3D.
   REGEX="; layer ${LAYER},"
 fi
 
