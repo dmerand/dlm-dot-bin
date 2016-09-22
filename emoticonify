@@ -19,4 +19,4 @@ if [ ! $(which convert) ]; then
   exit 1
 fi
 
-convert "$INFILE" -resize 120 -fuzz 5000 -transparent "$TRANSPARENTCOLOR" -strip "$BASEFILE"_emoticon.png
+convert "$INFILE" -resize 480 -fuzz 5000 -transparent "$TRANSPARENTCOLOR" -strip "$BASEFILE"_emoticon.png
