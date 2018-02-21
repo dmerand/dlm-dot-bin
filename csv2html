@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+#convert a TSV file to an HTML file
+#author: Donald L. Merand
+
+#note: this is most useful in conjunction with bcat, which sends results to the browser
+# you can get bcat on OS X using homebrew
+# http://mxcl.github.com/homebrew/
+# then type "brew install bcat"
+
+#also note: this script only creates an HTML snippet - you'll probably want to wrap
+# it in some pretty CSS, not to mention <html> and <body> tags
+
+require 'csv'
+
+printf '<table>'
+
+ARGF.each do |line|
+  printf '<tr>'
+  CSV.parse(line)[0].each { |f| printf "<td>%s</td>", f }
+  printf '</tr>'
+end
+
+printf '</table>'
