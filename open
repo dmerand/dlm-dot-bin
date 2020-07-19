@@ -1,0 +1,8 @@
+#!/bin/sh
+# open like on the Mac
+
+if [ -e "$@" ]; then
+  explorer.exe "$@"
+else
+  cmd.exe /c start "" "$@"
+fi
