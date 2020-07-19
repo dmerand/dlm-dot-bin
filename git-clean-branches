@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+git branch | \
+awk '{if ($0 ~ /(master|stag|test)/){} else {print $0}}' | \
+xargs -I xXx git branch -d xXx
