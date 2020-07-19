@@ -24,7 +24,7 @@ require 'open-uri'
 
 config ||= {}
 
-Nokogiri::HTML(open('https://styleguide.lab.explo.org/colors/v2')) \
+Nokogiri::HTML(URI.open('https://styleguide.lab.explo.org/colors/v2')) \
 .search("div.x-#{color}:contains('#')").each do |item|
   match = item.content.scan(/#.*\S/).first
   File.write(config_file, config.merge(color => match).to_json)
