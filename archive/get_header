@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# Author: Donald L. Merand
+# Extracts the header files from AppleScript-enabled OSX applications
+# so that you can reference them in Ruby/Python script-bridge apps.
+#
+# See [appledeveloper][This Page] for details
+#
+# [appledeveloper]: http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/RubyPythonCocoa/Articles/UsingScriptingBridge.html#//apple_ref/doc/uid/TP40005424-SW1
+
+if [ -z $1 -o -z $2 ]; then
+  echo "Usage: get_header AppName org.class.AppName"
+  exit 1
+fi
+
+sdef /Applications/"$1".app | sdp -fh --basename "$1" --bundleid "$2"
+
+[ $? = "0" ] && echo "file $1.h created"

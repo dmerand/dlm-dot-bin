@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+xargs -I XxX whois XxX | 
+awk '/Org/{print $0}'

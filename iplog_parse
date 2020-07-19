@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+cat | 
+awk '{gsub(/DST=/,"",$11);print $11}' | 
+sort | 
+uniq
