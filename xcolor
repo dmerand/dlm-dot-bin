@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+# Return the HEX value of EXPLO colors by name.
 
 color = ARGV[0]
 exit 1 if color.nil?

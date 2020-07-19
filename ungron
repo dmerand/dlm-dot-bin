@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
+# Do a reverse gron
+
 gron --ungron

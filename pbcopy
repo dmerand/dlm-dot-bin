@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
+
+# Copy clipboard in WSL like on a mac
+
 cmd.exe /C clip

@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
+# Spit out some weather
+
 curl "https://wttr.in?u"

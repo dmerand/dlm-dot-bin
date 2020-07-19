@@ -1,2 +1,5 @@
 #!/usr/bin/env sh
+
+# Paste clipboard in WSL like on a Mac
+
 powershell.exe -Command "Get-Clipboard"

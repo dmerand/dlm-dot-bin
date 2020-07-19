@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Print out some fake info
+
 require 'faker'
 
 100.times do 

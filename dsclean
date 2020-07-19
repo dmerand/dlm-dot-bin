@@ -1,3 +1,5 @@
 #!/usr/bin/env sh
 
+# Recursively clean up .DS_Store files from Mac OSX finder
+
 find . -name "*DS_Store" -delete

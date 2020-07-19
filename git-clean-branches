@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+# Remove any branches from the current git repo that don't have `master`, `staging`, or `test` in their name.
+
 git branch | \
 awk '{if ($0 ~ /(master|stag|test)/){} else {print $0}}' | \
 xargs -I xXx git branch -d xXx

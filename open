@@ -1,5 +1,5 @@
 #!/bin/sh
-# open like on the Mac
+# open in WSL like on the Mac
 
 if [ -e "$@" ]; then
   explorer.exe "$@"
